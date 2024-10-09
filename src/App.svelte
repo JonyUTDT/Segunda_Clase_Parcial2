@@ -12,19 +12,32 @@
     .range([1, 500]) // O de 1 a 3
   
   /* 3. Escala para genero (categórico > color) */
-  const colorMe_gusta = d3.scaleOrdinal()
+  const colorMe_gusta_base = d3.scaleOrdinal()
     .domain(["Si", "No"])
     .range(["#32FF00", "#FF0000"])
 
+  // Escala para la saturación según el uso
+  const saturacionUso = d3.scaleOrdinal()
+    .domain(["Lo uso", "A veces", "No lo uso"])
+    .range([1, 0.6, 0.3])
+
+  // Función para aplicar saturación al color base
+  const colorMe_gusta = (gusta, uso) => {
+    let colorBase = colorMe_gusta_base(gusta) // Obtiene el color base (verde o rojo)
+    let saturacion = saturacionUso(uso) // Obtiene la saturación (1, 0.6 o 0.3)
+
+    return d3.color(colorBase).brighter(saturacion); // Ajusta la saturación
+  }
+
   /* 4. Escala para continentes (categórico > color)   */
   const colorTipo = d3.scaleOrdinal()
     .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
     .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
 
   /* 4. Escala para continentes (categórico > color)   */
-  const colorTipo = d3.scaleOrdinal()
-    .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
-    .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
+    // const colorTipo = d3.scaleOrdinal()
+    //   .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
+    //   .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
 
 </script>
 
