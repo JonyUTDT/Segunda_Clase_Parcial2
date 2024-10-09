@@ -34,10 +34,9 @@
     .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
     .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
 
-  /* 4. Escala para continentes (categórico > color)   */
-    // const colorTipo = d3.scaleOrdinal()
-    //   .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
-    //   .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
+    const lineGenerator = d3.line()
+      .x(d => d.x)
+      .y(d => d.y);
 
 </script>
 
@@ -45,7 +44,7 @@
   <div class="header">
     <img src="/images/logo_referencias.svg" width="190" alt="anillos" />
     <h3 class="headline">
-      <b>Los reyes del oro</b>
+      <b>Las reinas de mi pantalla</b>
       Medallas, participaciones y dominio en distintos continentes
     </h3>
     <p class="bajada">
@@ -61,12 +60,15 @@
 
     <!-- Conedor de las entidades -->
     <div class="container">
+
+      <!-- Flecha rellena -->
+      <div class="flecha"></div>
       
       <!-- Iteramos la data para visualizar c/ entidad -->
-      <!-- {#each atletas as atleta}
-        <div class="person-container">
+      <!-- {#each apps as app}
+        <div class="app-container">
           <div
-            class="person"
+            class="app"
             style="
               border-color: {colorContinentes(atleta.continent)};
               background-color:{colorGenero(atleta.gender)}; 
@@ -149,4 +151,14 @@
     margin-top: 50px;
     margin-bottom: 20px;
   }
+  /* Estilos para la flecha */
+  .flecha {
+  width: 0;
+  height: 0;
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 100px solid #3498db; /* Color de la flecha */
+  margin: 20px; /* Espacio alrededor de la flecha */
+}
+
 </style>
