@@ -1,30 +1,30 @@
 <script>
   import * as d3 from "d3"
-  import atletas from "/src/data/athletes.csv"
+  import apps from "/src/data/App.csv"
   // import atletas from "/src/data/athletes.json"
 
-  console.log("atletas", atletas)
+  console.log("apps", apps)
 
   /* 1. Escala para participaciones (cuantitativo > grosor) */
-  const minMaxParticipations = d3.extent(atletas, (d) => d.participations)
+  const minMaxAlmacenamiento = d3.extent(apps, (d) => d.Almacenamiento)
   let grosorPartic = d3.scaleLinear()
-    .domain(minMaxParticipations).range([2, 18])
-
-  /* 2. Escala para medallas (cuantitativo > diámetro círculo) */
-  const maxMedallas = d3.max(atletas, (d) => d.medallas)
-  const diamMedallas = d3.scaleRadial()
-    .domain([0, maxMedallas]).range([0, 100])
-
+    .domain(minMaxAlmacenamiento)
+    .range([1, 500]) // O de 1 a 3
+  
   /* 3. Escala para genero (categórico > color) */
-  const colorGenero = d3.scaleOrdinal()
-    .domain(["F", "M"])
-    .range(["#F7DDBA", "#E4D9F2"])
+  const colorMe_gusta = d3.scaleOrdinal()
+    .domain(["Si", "No"])
+    .range(["#32FF00", "#FF0000"])
 
   /* 4. Escala para continentes (categórico > color)   */
-  const colorContinentes = d3
-    .scaleOrdinal()
-    .domain(["América", "África", "Asia", "Europa", "Oceanía"])
-    .range(["#ed334e", "#000000", "#fbb132", "#009fe3", "#00963f"])
+  const colorTipo = d3.scaleOrdinal()
+    .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
+    .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
+
+  /* 4. Escala para continentes (categórico > color)   */
+  const colorTipo = d3.scaleOrdinal()
+    .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
+    .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
 
 </script>
 
@@ -50,7 +50,7 @@
     <div class="container">
       
       <!-- Iteramos la data para visualizar c/ entidad -->
-      {#each atletas as atleta}
+      <!-- {#each atletas as atleta}
         <div class="person-container">
           <div
             class="person"
@@ -63,7 +63,7 @@
             ">
           </div>
         </div>
-      {/each}
+      {/each} -->
       <!-- Fin iteración -->
 
     </div>
