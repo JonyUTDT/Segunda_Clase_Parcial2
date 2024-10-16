@@ -1,20 +1,43 @@
 <script>
   import * as d3 from "d3"
   import apps from "/src/data/App.csv"
+  import apps1 from "/src/data/AppJ.csv"
   // import atletas from "/src/data/athletes.json"
 
-  console.log("apps", apps)
+  console.log(apps);
+  console.log(apps1);
 
-  /* 1. Escala para participaciones */
-  const minMaxAlmacenamiento = d3.extent(apps, (d) => d.Almacenamiento)
-  let grosorPartic = d3.scaleLinear()
+  let svg;
+
+  /* 1. Escala para participaciones Fede*/
+  const minMaxAlmacenamiento = d3.extent(apps, (d) => +d.Almacenamiento);
+  let grosorPartic = d3
+    .scaleLinear()
     .domain(minMaxAlmacenamiento)
-    .range([1, 500]) // O de 1 a 3
-  
+    .range([1, 10]); // Grosor de 1 a 3
+
+  let tamañoPunta = d3
+    .scaleLinear()
+    .domain(minMaxAlmacenamiento)
+    .range([5, 20]); // Tamaño de la punta de 5 a 20
+
+  /* 1. Escala para participaciones Fede*/
+  const minMaxAlmacenamiento1 = d3.extent(apps, (d) => +d.Almacenamiento);
+  let grosorPartic1 = d3
+    .scaleLinear()
+    .domain(minMaxAlmacenamiento1)
+    .range([1, 10]); // Grosor de 1 a 3
+
+  let tamañoPunta1 = d3
+    .scaleLinear()
+    .domain(minMaxAlmacenamiento1)
+    .range([5, 20]); // Tamaño de la punta de 5 a 20
+
   /* 3. Escala para Me gusta (Base, despues se le da la saturacion, en colorMe_gusta) */
-  const colorMe_gusta_base = d3.scaleOrdinal()
+  const colorMe_gusta_base = d3
+    .scaleOrdinal()
     .domain(["Si", "No"])
-    .range(["#32FF00", "#FF0000"])
+    .range(["#32FF00", "#FF0000"]); // Verde para "Si", Rojo para "No"
 
   // Escala para la saturación según el uso
   const saturacionUso = d3.scaleOrdinal()
@@ -22,70 +45,164 @@
     .range([1, 0.6, 0.3])
 
   // Función para aplicar saturación al color base
-  const colorMe_gusta = (gusta, uso) => {
-    let colorBase = colorMe_gusta_base(gusta) // Obtiene el color base (verde o rojo)
-    let saturacion = saturacionUso(uso) // Obtiene la saturación (1, 0.6 o 0.3)
-
-    return d3.color(colorBase).brighter(saturacion); // Ajusta la saturación
+  function colorMe_gusta(gusta, uso){
+    let cgusta=0
+    if (gusta == 'Si'){
+      cgusta=100
+    }
+    let cuso=100
+    if (uso =='A veces'){
+      cuso=60
+    }
+    else if (uso =='No lo Uso'){
+      cuso=30
+    }
+    return `hsl(${cgusta} ${cuso} 50% / 1)`
   }
 
   /* 4. Escala para Tipo */
   const colorTipo = d3.scaleOrdinal()
-    .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
-    .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
-
-  // Creador de lineas??
-  // const lineGenerator = d3.line()
-  //   .x(d => d.x)
-  //   .y(d => d.y);
-
+    .domain(["Musica", "Red Social", "Fotos y Videos", "Servicio", "Entretenimiento", "Juego"])
+    .range(["#B200FF", "#45D2F1", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
   
+  const centerX = 300;
+  const centerY = 300;
+  const radius = 200;
 
+  // Ángulo de rotación manual
+  let manualRotation = 270;
+
+  function angle(i) {
+    return (i / apps.length) * (2 * Math.PI);
+  }
+
+  function x1(i) {
+    return centerX + Math.cos(angle(i)) * radius
+  }
+
+  function y1(i) {
+    return centerY + Math.sin(angle(i)) * radius
+  }
+
+// Función para calcular las coordenadas de la punta
+function punta(x, y, tipo, almacenamiento) {
+    const size = tamañoPunta(almacenamiento); // Tamaño de la punta basado en el almacenamiento
+    const color = colorTipo(tipo);
+
+    return `
+      ${x},${y} 
+      ${x - size},${y - size} 
+      ${x + size},${y - size}
+    `;
+  }
+  function punta1(x, y, tipo, almacenamiento) {
+    const size = tamañoPunta1(almacenamiento); // Tamaño de la punta basado en el almacenamiento
+    const color = colorTipo(tipo);
+
+    return `
+      ${x},${y} 
+      ${x - size},${y - size} 
+      ${x + size},${y - size}
+    `;
+  }
+// Función para calcular la rotación
+function rotacion(index) {
+    const ang = angle(index) + manualRotation * (Math.PI / 180); // Añadir la rotación manual
+    return `rotate(${(ang * 180) / Math.PI}, ${x1(index)}, ${y1(index)})`;
+  }
 </script>
 
 <main>
   <div class="header">
-    <img src="/images/logo_referencias.svg" width="190" alt="anillos" />
+    <!-- <img src="/images/logo_referencias.svg" width="190" alt="anillos" /> -->
     <h3 class="headline">
-      <b>Las reinas de mi pantalla</b>
-      <b>Las estrellas que brillan en cada frame</b>
-      Uso, gustos y almacenamiento de las apps más populares
+      <b>Brillando en cada pantalla con apps estelares</b>
+      <!-- <b>Las estrellas que brillan en cada frame</b> -->
+      <!-- <b>Las reinas de mi pantalla</b> -->
+      <p style="font-size: 18px;">Uso y almacenamiento de las apps más populares</p>
     </h3>
     <p class="bajada">
-      Las apps con mas descargas y nuevos usuarios en los ultimos 3 años
+      Las apps con más descargas y nuevos usuarios en los últimos 3 años
     </p>
-    <img
+    <br>
+    <br>
+    <div class="Imagenes" style="margin: 5px; border: 2px solid grey; padding: 8px;">    <img
       class="referencias"
-      src="/images/referencias.svg"
-      width="490"
-      alt="anillos"
+      src="/images/Almacenamiento1.svg"
+      alt="almacenamiento"
+    />
+    <img 
+    class="referencias"
+    src="/images/Gusto1.svg"
+    alt="gusto"
+    />
+    <img 
+    class="referencias"
+    src="/images/Uso1.svg"
+    alt="uso"
+    />
+    <img 
+    class="referencias"
+    src="/images/Genero1.svg"
+    alt="genero"
     />
   </div>
-
-    <!-- Conedor de las entidades -->
-    <div class="container">
-
-      <!-- Flecha rellena -->
-      <div class="flecha"></div>
-      
-      <!-- Iteramos la data para visualizar c/ entidad -->
-      <!-- {#each apps as app}
-        <div class="app-container">
-          <div
-            class="app"
-            style="
-              border-color: {colorContinentes(atleta.continent)};
-              background-color:{colorGenero(atleta.gender)}; 
-              width: {diamMedallas(atleta.medallas)}px; 
-              height: {diamMedallas(atleta.medallas)}px; 
-              border-width: {grosorPartic(atleta.participations)}px; 
-            ">
-          </div>
-        </div>
-      {/each} -->
-      <!-- Fin iteración -->
-
+  <div class="container">
+    <div class = "Fede">
+    <h4 style="text-align: center; margin-bottom: -50px; margin-top: 80px">Federico</h4>
+    <svg id="visualization" width="600" height="600">
+      {#each apps as app, index}
+        <line
+          x1={centerX}
+          y1={centerY}
+          x2={x1(index)}
+          y2={y1(index)}
+          stroke={colorMe_gusta(app.Me_gusta, app.Uso)}
+          stroke-width={grosorPartic(app.Almacenamiento)}
+        ></line>
+        <polygon
+            points={punta(x1(index), y1(index) + 5, app.Tipo, app.Almacenamiento)}
+            fill={colorTipo(app.Tipo)}
+            transform={rotacion(index)}
+          ></polygon>
+        {/each}
+        <image 
+          href="/images/Celular.svg"  
+          x={centerX - 47}  
+          y={centerY - 50}  
+          width="100"  
+          height="100"
+        />
+    </svg>
     </div>
+    <div class = "Jony">
+    <h4 style="text-align: center; margin-bottom: -50px; margin-top: 80px">Jonathan</h4>
+    <svg id="visualization" width="600" height="600">
+      {#each apps1 as app1, index}
+        <line
+          x1={centerX}
+          y1={centerY}
+          x2={x1(index)}
+          y2={y1(index)}
+          stroke={colorMe_gusta(app1.Me_gusta, app1.Uso)}
+          stroke-width={grosorPartic(app1.Almacenamiento)}
+        ></line>
+        <polygon
+            points={punta(x1(index), y1(index) + 5, app1.Tipo, app1.Almacenamiento)}
+            fill={colorTipo(app1.Tipo)}
+            transform={rotacion(index)}
+          ></polygon>
+        {/each}
+        <image 
+          href="/images/Celular.svg"  
+          x={centerX - 47}  
+          y={centerY - 50}  
+          width="100"  
+          height="100"
+        />
+    </svg>
+    </div>
+  </div>
 </main>
 
 <style>
@@ -105,64 +222,30 @@
     margin: 20px;
   }
   .bajada {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 300;
     text-align: center;
     margin: 10px;
   }
-  .headline b {
-    display: block;
-  }
+
   .container {
     display: flex;
     justify-content: center;
-    align-items: end;
-    margin: auto;
-    flex-wrap: wrap;
-    max-width: 1020px;
-    gap: 30px;
-    margin-bottom: 100px;
+    margin-top: 20px;
   }
-  .person-container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    flex: 180px 0 0;
+
+  .Imagenes {
+    display: flex;                /* Usamos flexbox para alinear las imágenes */
+    justify-content: center;      /* Centra las imágenes horizontalmente */
+    align-items: center;          /* Centra las imágenes verticalmente */
+    gap: 15px;                   /* Espaciado entre las imágenes */
+    flex-wrap: wrap;             /* Permite que las imágenes se ajusten en varias filas si es necesario */
   }
-  .person {
-    width: 100px;
-    height: 100px;
-    border: 10px solid black;
-    border-radius: 50%;
-    box-sizing: border-box;
-    background-color: pink;
-  }
-  .nombre {
-    font-size: 13px;
-    font-weight: bold;
-    line-height: 1;
-    text-transform: uppercase;
-    margin: 0;
-    margin-top: 8px;
-  }
-  .deporte {
-    font-size: 14px;
-    color: #666;
-    margin: 0;
-  }
+
   .referencias {
-    margin-top: 50px;
-    margin-bottom: 20px;
+    width: 285px;                /* Ancho ajustado para las imágenes */
+    height: 285px;               /* Altura ajustada para las imágenes */
+    object-fit: contain;         /* Ajusta la imagen dentro del área sin recortarla */
   }
-  /* Estilos para la flecha */
-  .flecha {
-  width: 0;
-  height: 0;
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 100px solid #3498db; /* Color de la flecha */
-  margin: 20px; /* Espacio alrededor de la flecha */
-}
 
 </style>
