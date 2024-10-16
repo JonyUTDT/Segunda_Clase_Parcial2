@@ -5,13 +5,13 @@
 
   console.log("apps", apps)
 
-  /* 1. Escala para participaciones (cuantitativo > grosor) */
+  /* 1. Escala para participaciones */
   const minMaxAlmacenamiento = d3.extent(apps, (d) => d.Almacenamiento)
   let grosorPartic = d3.scaleLinear()
     .domain(minMaxAlmacenamiento)
     .range([1, 500]) // O de 1 a 3
   
-  /* 3. Escala para genero (categórico > color) */
+  /* 3. Escala para Me gusta (Base, despues se le da la saturacion, en colorMe_gusta) */
   const colorMe_gusta_base = d3.scaleOrdinal()
     .domain(["Si", "No"])
     .range(["#32FF00", "#FF0000"])
@@ -29,14 +29,17 @@
     return d3.color(colorBase).brighter(saturacion); // Ajusta la saturación
   }
 
-  /* 4. Escala para continentes (categórico > color)   */
+  /* 4. Escala para Tipo */
   const colorTipo = d3.scaleOrdinal()
     .domain(["Musica", "Red Social", "Foto y Video", "Servicio", "Entretenimiento", "Juego"])
     .range(["#B200FF", "#FFEE00", "#FFA600", "#FF00D4", "#0009FF", "#9F4343"])
 
-    const lineGenerator = d3.line()
-      .x(d => d.x)
-      .y(d => d.y);
+  // Creador de lineas??
+  // const lineGenerator = d3.line()
+  //   .x(d => d.x)
+  //   .y(d => d.y);
+
+  
 
 </script>
 
@@ -45,10 +48,11 @@
     <img src="/images/logo_referencias.svg" width="190" alt="anillos" />
     <h3 class="headline">
       <b>Las reinas de mi pantalla</b>
-      Medallas, participaciones y dominio en distintos continentes
+      <b>Las estrellas que brillan en cada frame</b>
+      Uso, gustos y almacenamiento de las apps más populares
     </h3>
     <p class="bajada">
-      Los atletas con más medallas olímpicas de oro en los Juegos Olímpicos
+      Las apps con mas descargas y nuevos usuarios en los ultimos 3 años
     </p>
     <img
       class="referencias"
