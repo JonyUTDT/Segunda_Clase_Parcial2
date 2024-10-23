@@ -204,7 +204,6 @@ function rotacion(index) {
     <br>
     <br>
     <br>
-    <h4>Referencias</h4>
     <div class="Imagenes" style="margin: 5px; padding: 8px; margin-top: -70px">    
       <img
         class="referencias"
@@ -228,7 +227,7 @@ function rotacion(index) {
       />
   </div>
 
-  <div class="Foot">
+  <div class="Foot" style="margin-top: -30px;">
   <footer class="footer">
     <p style= "font-size: 12px; margin-bottom: 5px ">Creado por Federico Villanueva y Jonathan Jeifetz</p>
     <p style= "font-size: 12px; margin-bottom: 5px">
@@ -236,12 +235,11 @@ function rotacion(index) {
       <a href="https://github.com/fedemvilla/vd_maqueta-main" target="_blank">GitHub</a>
     </p>
     <p style="font-size: 12px; margin-bottom: 5px">
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jjeifetz@mail.utdt.edu" target="_blank">jjeifetz@mail.utdt.edu</a> |
-      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jjeifetz@mail.utdt.edu" target="_blank">Enviar un correo a jjeifetz@mail.utdt.edu</a>
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=fvillanueva@mail.utdt.edu" target="_blank">fvillanueva@mail.utdt.edu</a> |
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jjeifetz@mail.utdt.edu" target="_blank">jjeifetz@mail.utdt.edu</a> 
     </p>
     <div class="DiTella">
-      <img src="/images/LogoDiTella.png" width="50" alt="UTDT" />
-      <p style= "font-size: 12px; margin-bottom: 20px">Visualización de Datos, Universidad Di Tella</p>
+      <p style= "font-size: 12px; margin-bottom: 20px;">Visualización de Datos, Universidad Torcuato Di Tella</p>
     </div>
   </footer>
 </div>
