@@ -8,18 +8,22 @@
   console.log(apps1);
 
   let svg;
+  let tooltipVisible = false;
+  let tooltipX = 10;
+  let tooltipY = 0;
+  let tooltipName = "";
 
   /* 1. Escala para participaciones Fede*/
   const minMaxAlmacenamiento = d3.extent(apps, (d) => +d.Almacenamiento);
   let grosorPartic = d3
     .scaleLinear()
     .domain(minMaxAlmacenamiento)
-    .range([1, 10]); // Grosor de 1 a 3
+    .range([3, 12]); // Grosor de 1 a 3
 
   let tamañoPunta = d3
     .scaleLinear()
     .domain(minMaxAlmacenamiento)
-    .range([5, 20]); // Tamaño de la punta de 5 a 20
+    .range([7, 22]); // Tamaño de la punta de 5 a 20
 
   /* 1. Escala para participaciones Fede*/
   const minMaxAlmacenamiento1 = d3.extent(apps, (d) => +d.Almacenamiento);
@@ -110,6 +114,17 @@ function rotacion(index) {
     const ang = angle(index) + manualRotation * (Math.PI / 180); // Añadir la rotación manual
     return `rotate(${(ang * 180) / Math.PI}, ${x1(index)}, ${y1(index)})`;
   }
+
+  function showTooltip(event, name) {
+    tooltipX = event.pageX +15;
+    tooltipY = event.pageY;
+    tooltipName = name;
+    tooltipVisible = true;
+  }
+
+  function hideTooltip() {
+    tooltipVisible = false;
+  }
 </script>
 
 <main>
@@ -119,93 +134,133 @@ function rotacion(index) {
       <b>Brillando en cada pantalla con apps estelares</b>
       <!-- <b>Las estrellas que brillan en cada frame</b> -->
       <!-- <b>Las reinas de mi pantalla</b> -->
-      <p style="font-size: 18px;">Uso y almacenamiento de las apps más populares</p>
     </h3>
     <p class="bajada">
-      Las apps con más descargas y nuevos usuarios en los últimos 3 años
+      Uso y almacenamiento de las apps más populares
     </p>
+    <div class="container">
+      <div class = "Fede">
+        <h4 style="text-align: center; margin-bottom: -50px; margin-top: 60px">Federico</h4>
+        <svg id="visualization" width="600" height="600">
+          {#each apps as app, index}
+            <line
+              x1={centerX}
+              y1={centerY}
+              x2={x1(index)}
+              y2={y1(index)}
+              stroke={colorMe_gusta(app.Me_gusta, app.Uso)}
+              stroke-width={grosorPartic(app.Almacenamiento)}
+            ></line>
+            <polygon
+                points={punta(x1(index), y1(index) + 5, app.Tipo, app.Almacenamiento)}
+                fill={colorTipo(app.Tipo)}
+                transform={rotacion(index)}
+                on:mouseover={(e) => showTooltip(e, app.Nombre)}
+                on:mousemove={(e) => showTooltip(e, app.Nombre)}
+                on:mouseout={hideTooltip}
+              ></polygon>
+            {/each}
+            <image 
+              href="/images/Celular.svg"  
+              x={centerX - 47}  
+              y={centerY - 50}  
+              width="100"  
+              height="100"
+            />
+        </svg>
+      </div>
+      <div class = "Jony">
+        <h4 style="text-align: center; margin-bottom: -50px; margin-top: 60px">Jonathan</h4>
+        <svg id="visualization" width="600" height="600">
+          {#each apps1 as app1, index}
+            <line
+              x1={centerX}
+              y1={centerY}
+              x2={x1(index)}
+              y2={y1(index)}
+              stroke={colorMe_gusta(app1.Me_gusta, app1.Uso)}
+              stroke-width={grosorPartic(app1.Almacenamiento)}
+            ></line>
+            <polygon
+                points={punta(x1(index), y1(index) + 5, app1.Tipo, app1.Almacenamiento)}
+                fill={colorTipo(app1.Tipo)}
+                transform={rotacion(index)}
+                on:mouseover={(e) => showTooltip(e, app1.Nombre)}
+                on:mousemove={(e) => showTooltip(e, app1.Nombre)}
+                on:mouseout={hideTooltip}
+              ></polygon>
+            {/each}
+            <image 
+              href="/images/Celular.svg"  
+              x={centerX - 47}  
+              y={centerY - 50}  
+              width="100"  
+              height="100"
+            />
+        </svg>
+      </div>
+    </div>
     <br>
     <br>
-    <div class="Imagenes" style="margin: 5px; border: 2px solid grey; padding: 8px;">    <img
+    <br>
+    <br>
+    <h4>Referencias</h4>
+    <div class="Imagenes" style="margin: 5px; padding: 8px; margin-top: -70px">    
+      <img
+        class="referencias"
+        src="/images/Almacenamiento1.svg"
+        alt="almacenamiento"
+      />
+      <img 
       class="referencias"
-      src="/images/Almacenamiento1.svg"
-      alt="almacenamiento"
-    />
-    <img 
-    class="referencias"
-    src="/images/Gusto1.svg"
-    alt="gusto"
-    />
-    <img 
-    class="referencias"
-    src="/images/Uso1.svg"
-    alt="uso"
-    />
-    <img 
-    class="referencias"
-    src="/images/Genero1.svg"
-    alt="genero"
-    />
+      src="/images/Gusto1.svg"
+      alt="gusto"
+      />
+      <img 
+      class="referencias"
+      src="/images/Uso1.svg"
+      alt="uso"
+      />
+      <img 
+      class="referencias"
+      src="/images/Genero1.svg"
+      alt="genero"
+      />
   </div>
-  <div class="container">
-    <div class = "Fede">
-    <h4 style="text-align: center; margin-bottom: -50px; margin-top: 80px">Federico</h4>
-    <svg id="visualization" width="600" height="600">
-      {#each apps as app, index}
-        <line
-          x1={centerX}
-          y1={centerY}
-          x2={x1(index)}
-          y2={y1(index)}
-          stroke={colorMe_gusta(app.Me_gusta, app.Uso)}
-          stroke-width={grosorPartic(app.Almacenamiento)}
-        ></line>
-        <polygon
-            points={punta(x1(index), y1(index) + 5, app.Tipo, app.Almacenamiento)}
-            fill={colorTipo(app.Tipo)}
-            transform={rotacion(index)}
-          ></polygon>
-        {/each}
-        <image 
-          href="/images/Celular.svg"  
-          x={centerX - 47}  
-          y={centerY - 50}  
-          width="100"  
-          height="100"
-        />
-    </svg>
+
+  <div class="Foot">
+  <footer class="footer">
+    <p style= "font-size: 12px; margin-bottom: 5px ">Creado por Federico Villanueva y Jonathan Jeifetz</p>
+    <p style= "font-size: 12px; margin-bottom: 5px">
+      <a href="https://www.linkedin.com/in/federico-mateo-villanueva-a52196279" target="_blank">LinkedIn</a> |
+      <a href="https://github.com/fedemvilla/vd_maqueta-main" target="_blank">GitHub</a>
+    </p>
+    <p style="font-size: 12px; margin-bottom: 5px">
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jjeifetz@mail.utdt.edu" target="_blank">jjeifetz@mail.utdt.edu</a> |
+      <a href="https://mail.google.com/mail/?view=cm&fs=1&to=jjeifetz@mail.utdt.edu" target="_blank">Enviar un correo a jjeifetz@mail.utdt.edu</a>
+    </p>
+    <div class="DiTella">
+      <img src="/images/LogoDiTella.png" width="50" alt="UTDT" />
+      <p style= "font-size: 12px; margin-bottom: 20px">Visualización de Datos, Universidad Di Tella</p>
     </div>
-    <div class = "Jony">
-    <h4 style="text-align: center; margin-bottom: -50px; margin-top: 80px">Jonathan</h4>
-    <svg id="visualization" width="600" height="600">
-      {#each apps1 as app1, index}
-        <line
-          x1={centerX}
-          y1={centerY}
-          x2={x1(index)}
-          y2={y1(index)}
-          stroke={colorMe_gusta(app1.Me_gusta, app1.Uso)}
-          stroke-width={grosorPartic(app1.Almacenamiento)}
-        ></line>
-        <polygon
-            points={punta(x1(index), y1(index) + 5, app1.Tipo, app1.Almacenamiento)}
-            fill={colorTipo(app1.Tipo)}
-            transform={rotacion(index)}
-          ></polygon>
-        {/each}
-        <image 
-          href="/images/Celular.svg"  
-          x={centerX - 47}  
-          y={centerY - 50}  
-          width="100"  
-          height="100"
-        />
-    </svg>
+  </footer>
+</div>
+  {#if tooltipVisible}
+    <div class="tooltip" style="left: {tooltipX}px; top: {tooltipY}px;">
+      {tooltipName}
     </div>
-  </div>
+  {/if}
 </main>
 
 <style>
+  .tooltip {
+    position: absolute;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    pointer-events: none;
+  }
   .header {
     display: flex;
     justify-content: center;
@@ -232,6 +287,7 @@ function rotacion(index) {
     display: flex;
     justify-content: center;
     margin-top: 20px;
+    margin-bottom: -60px;
   }
 
   .Imagenes {
@@ -239,13 +295,29 @@ function rotacion(index) {
     justify-content: center;      /* Centra las imágenes horizontalmente */
     align-items: center;          /* Centra las imágenes verticalmente */
     gap: 15px;                   /* Espaciado entre las imágenes */
-    flex-wrap: wrap;             /* Permite que las imágenes se ajusten en varias filas si es necesario */
+    flex-wrap: wrap;         /* Permite que las imágenes se ajusten en varias filas si es necesario */
   }
 
   .referencias {
     width: 285px;                /* Ancho ajustado para las imágenes */
     height: 285px;               /* Altura ajustada para las imágenes */
     object-fit: contain;         /* Ajusta la imagen dentro del área sin recortarla */
+  }
+
+  .footer a {
+    color: #0077b5;  /* Color para los enlaces */
+    text-decoration: none;
+    margin: 0 3px;
+  }
+
+  .footer {
+    text-align: center;
+    color: gray;  /* Color gris clarito */
+    padding: 20px;
+  }
+
+  .footer a:hover {
+    color: gray;  /* Cambia a un gris más oscuro al pasar el ratón por encima */
   }
 
 </style>
