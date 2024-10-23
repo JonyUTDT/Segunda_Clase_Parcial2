@@ -232,7 +232,7 @@ function rotacion(index) {
     <p style= "font-size: 12px; margin-bottom: 5px ">Creado por Federico Villanueva y Jonathan Jeifetz</p>
     <p style= "font-size: 12px; margin-bottom: 5px">
       <a href="https://www.linkedin.com/in/federico-mateo-villanueva-a52196279" target="_blank">LinkedIn</a> |
-      <a href="https://github.com/fedemvilla/vd_maqueta-main" target="_blank">GitHub</a>
+      <a href="https://github.com/JonyUTDT/Segunda_Clase_Parcial2.git" target="_blank">GitHub</a>
     </p>
     <p style="font-size: 12px; margin-bottom: 5px">
       <a href="https://mail.google.com/mail/?view=cm&fs=1&to=fvillanueva@mail.utdt.edu" target="_blank">fvillanueva@mail.utdt.edu</a> |
